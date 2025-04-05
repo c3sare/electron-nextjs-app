@@ -12,38 +12,43 @@ import {
 } from "@/components/ui/context-menu";
 
 export default function HomePage() {
-  const [message, setMessage] = React.useState("No message found");
-
   React.useEffect(() => {
-    window.ipc.on("message", (message) => {
-      setMessage(message);
-    });
+    window.ipc.getUsers().then(console.log);
   }, []);
 
   return (
     <ContextMenu>
       <ContextMenuTrigger>
-        <div>
-          <p className="font-bold">
-            ⚡ Electron + Next.js ⚡ - <Link href="/next">Go to next page</Link>
+        <div className="w-full">
+          <p className="font-bold text-center w-full p-4">
+            ⚡ Electron + Next.js ⚡
           </p>
           <Image
             src="/images/logo.png"
             alt="Logo image"
+            className="mx-auto"
             width={256}
             height={256}
           />
         </div>
-        <div>
-          <button
-            onClick={() => {
-              window.ipc.send("message", "Hello");
-            }}
+        <div className="w-full flex flex-col gap-2">
+          <Button
+            className=""
+            onClick={() => window.ipc.getUsers().then(console.log)}
           >
-            Test IPC
-          </button>
-          <Button>test</Button>
-          <p>{message}</p>
+            get users
+          </Button>
+          <Button
+            onClick={() =>
+              window.ipc.addUser({
+                name: "test",
+                age: 18,
+                email: "example@test.pl",
+              })
+            }
+          >
+            Add user
+          </Button>
         </div>
       </ContextMenuTrigger>
       <ContextMenuContent>
